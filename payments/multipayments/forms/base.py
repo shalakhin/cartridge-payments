@@ -24,7 +24,7 @@ class CallbackUUIDOrderForm(shopforms.OrderForm):
         is_first_step = step == checkout.CHECKOUT_STEP_FIRST
         if is_first_step and 'callback_uuid' not in initial:
             while True:
-                callback_uuid = initial__uuid()
+                callback_uuid = initial_uuid()
                 count = shop.Order.objects.filter(callback_uuid=callback_uuid) \
                     .count()
                 if not count:
@@ -32,7 +32,7 @@ class CallbackUUIDOrderForm(shopforms.OrderForm):
             initial['callback_uuid'] = callback_uuid
         elif 'callback_uuid' not in initial:
             while True:
-                callback_uuid = initial__uuid()
+                callback_uuid = initial_uuid()
                 exists = shop.Order.objects.filter(callback_uuid=callback_uuid) \
                     .exists()
                 if not exists:
