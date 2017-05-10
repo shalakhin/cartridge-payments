@@ -9,10 +9,14 @@ from cartridge.shop import models as shop
 from mezzanine.conf import settings
 
 
+def initial_uuid():
+    return uuid4().__str__()
+
+
 class CallbackUUIDOrderForm(shopforms.OrderForm):
 
     callback_uuid = forms.CharField(max_length=36, min_length=36,
-                                    widget=forms.HiddenInput(), initial=uuid4)
+                                    widget=forms.HiddenInput(), initial=initial_uuid)
 
     def __init__(self, request, step, *args, **kwargs):
         # Set the callback_uuid to something new
@@ -20,7 +24,7 @@ class CallbackUUIDOrderForm(shopforms.OrderForm):
         is_first_step = step == checkout.CHECKOUT_STEP_FIRST
         if is_first_step and 'callback_uuid' not in initial:
             while True:
-                callback_uuid = uuid4()
+                callback_uuid = initial__uuid()
                 count = shop.Order.objects.filter(callback_uuid=callback_uuid) \
                     .count()
                 if not count:
@@ -28,7 +32,7 @@ class CallbackUUIDOrderForm(shopforms.OrderForm):
             initial['callback_uuid'] = callback_uuid
         elif 'callback_uuid' not in initial:
             while True:
-                callback_uuid = uuid4()
+                callback_uuid = initial__uuid()
                 exists = shop.Order.objects.filter(callback_uuid=callback_uuid) \
                     .exists()
                 if not exists:
